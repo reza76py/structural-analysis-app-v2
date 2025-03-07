@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+.container {
+  @apply min-h-screen flex flex-col items-center relative bg-gray-200;
+}
+
+.input-box {
+  @apply bg-white p-3 rounded-lg shadow-lg w-52;
+}
+
+.title {
+  @apply text-xl font-bold mb-4 text-center;
+}
+
+.input-group {
+  @apply space-y-3 shadow-sm top-0;
+}
+
+.input-field {
+  @apply p-1 border rounded w-full focus:ring-2 focus:ring-blue-400 focus:outline-none placeholder:text-xs;
+}
+
+.submit-btn {
+  @apply max-w-sm p-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-xs;
+}
+
+.point-list {
+  @apply mt-2;
+}
+
+.list-title {
+  @apply font-semibold mb-2;
+}
+
+.point-item {
+  @apply p-1 bg-gray-200 rounded mb-1 text-center text-sm;
+}
