@@ -3,7 +3,7 @@ import "../styles/spaceTruss.css"; // Import the CSS file
 
 const SpaceTruss: React.FC = () => {
   const [coordinates, setCoordinates] = useState({ x: "", y: "", z: "" });
-  const [points, setPoints] = useState<{ x: string; y: string; z: string }[]>([]);
+  const [points, setPoints] = useState<{ id: number; name: string; x: string; y: string; z: string }[]>([]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCoordinates({ ...coordinates, [e.target.name]: e.target.value });
@@ -11,9 +11,27 @@ const SpaceTruss: React.FC = () => {
 
   const handleAddPoint = () => {
     if (coordinates.x && coordinates.y && coordinates.z) {
-      setPoints([...points, coordinates]);
+      const newNode = {
+        id: points.length + 1, // ID is for internal tracking (not used for display)
+        name: `Node.${points.length + 1}`, // Display name
+        ...coordinates,
+      };
+      setPoints([...points, newNode]);
       setCoordinates({ x: "", y: "", z: "" }); // Reset input fields
     }
+  };
+
+  const handleDeletePoint = (id: number) => {
+    const updatedPoints = points.filter((point) => point.id !== id);
+
+    // Renumber nodes dynamically after deletion
+    const renumberedPoints = updatedPoints.map((point, index) => ({
+      ...point,
+      id: index + 1,
+      name: `Node.${index + 1}`,
+    }));
+
+    setPoints(renumberedPoints);
   };
 
   return (
@@ -48,13 +66,14 @@ const SpaceTruss: React.FC = () => {
           <button onClick={handleAddPoint} className="submit-btn">Add Point</button>
         </div>
 
-        {/* Display entered points */}
+        {/* Display entered points with delete option */}
         <div className="point-list">
           <h3 className="list-title">Entered Points:</h3>
           <ul>
-            {points.map((point, index) => (
-              <li key={index} className="point-item">
-                ({point.x}, {point.y}, {point.z})
+            {points.map((point) => (
+              <li key={point.id} className="point-item">
+                <strong>{point.name}:</strong> ({point.x}, {point.y}, {point.z})
+                <button onClick={() => handleDeletePoint(point.id)} className="delete-btn">❌</button>
               </li>
             ))}
           </ul>

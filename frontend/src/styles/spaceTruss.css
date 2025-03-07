@@ -9,7 +9,7 @@
 }
 
 .input-box {
-  @apply bg-white p-3 rounded-lg shadow-lg w-52;
+  @apply bg-white p-4 rounded-lg shadow-lg w-60;
 }
 
 .title {
@@ -33,7 +33,7 @@
 }
 
 .list-title {
-  @apply font-semibold mb-2;
+  @apply font-semibold mb-2 text-center;
 }
 
 .point-item {
