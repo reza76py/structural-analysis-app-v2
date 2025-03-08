@@ -39,3 +39,7 @@
 .point-item {
   @apply p-1 bg-gray-200 rounded mb-1 text-center text-sm;
 }
+
+.restart-btn {
+  @apply max-w-sm p-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-xs;
+}
