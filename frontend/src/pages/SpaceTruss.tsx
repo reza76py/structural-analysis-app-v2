@@ -7,6 +7,12 @@ const API_URL = "http://127.0.0.1:8000/api/nodes/";
 const SpaceTruss: React.FC = () => {
   const [coordinates, setCoordinates] = useState({ x: "", y: "", z: "" });
   const [points, setPoints] = useState<{ id: number; name: string; x: string; y: string; z: string }[]>([]);
+  const [startNode, setStartNode] = useState("");
+  const [endNode, setEndNode] = useState("");
+  const [elements, setElements] = useState<{ start: string; end: string }[]>([]);
+  const [usedConnections, setUsedConnections] = useState<{ [key: string]: string[] }>({});
+
+
 
   useEffect(() => {
     fetchPoints();
@@ -65,6 +71,40 @@ const SpaceTruss: React.FC = () => {
       console.error("Error deleting all nodes:", error);
     }
   };
+
+  const handleCreateElement = () => {
+    if (!startNode || !endNode) {
+      alert("Please select both Start and End Nodes.");
+      return;
+    }
+    if (startNode === endNode) {
+      alert("Start and End Nodes must be different.");
+      return;
+    }
+  
+    // Check if this element or its reverse already exists
+    const elementExists = elements.some(
+      (element) =>
+        (element.start === startNode && element.end === endNode) ||
+        (element.start === endNode && element.end === startNode)
+    );
+  
+    if (elementExists) {
+      alert("This element already exists.");
+      return;
+    }
+  
+    // Update used connections
+    setUsedConnections((prev) => ({
+      ...prev,
+      [startNode]: [...(prev[startNode] || []), endNode],
+    }));
+  
+    // Add new element
+    setElements([...elements, { start: startNode, end: endNode }]);
+    setStartNode("");
+    setEndNode("");
+  };
   
   
 
@@ -111,7 +151,55 @@ const SpaceTruss: React.FC = () => {
               </li>
             ))}
           </ul>
-          <button onClick={handleRestartPoints} className="restart-btn">Restart</button>
+          <button onClick={handleRestartPoints} className="restart-btn">Restart Nodes</button>
+        </div>
+      </div>
+
+      <div className="element-box">
+        <h2 className="title">Space Truss Elements</h2>
+
+        {/* Start Node Dropdown */}
+        <h3 className="list-title">Select Start Node:</h3>
+        <select value={startNode} onChange={(e) => setStartNode(e.target.value)} className="input-field">
+          <option value=""></option>
+          {points.map((point) => (
+            <option key={point.id} value={point.name}>
+              {point.name}
+            </option>
+          ))}
+        </select>
+
+        {/* End Node Dropdown */}
+        <h3 className="list-title">Select End Node:</h3>
+        <select value={endNode} onChange={(e) => setEndNode(e.target.value)} className="input-field">
+          <option value=""></option> 
+          {points
+            .filter(
+              (point) =>
+                point.name !== startNode && // Prevent selecting the same node
+                !(usedConnections[startNode] || []).includes(point.name) // Exclude previously connected nodes for this startNode only
+            )
+            .map((point) => (
+              <option key={point.id} value={point.name}>
+                {point.name}
+              </option>
+            ))}
+        </select>
+        {/* Button to Create an Element */}
+        <button onClick={handleCreateElement} className="submit-btn">
+          Create Element
+        </button>
+
+        {/* Display Created Elements */}
+        <div className="element-list">
+          <h3 className="list-title">Created Elements:</h3>
+          <ul>
+            {elements.map((element, index) => (
+              <li key={index} className="point-item">
+                {element.start} → {element.end}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </div>

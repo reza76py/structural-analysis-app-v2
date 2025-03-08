@@ -5,7 +5,7 @@
 
 
 .container {
-  @apply min-h-screen flex flex-col items-center relative bg-gray-200;
+  @apply min-h-screen flex flex-col items-center relative bg-gray-200 p-2 gap-2;
 }
 
 .input-box {
@@ -43,3 +43,8 @@
 .restart-btn {
   @apply max-w-sm p-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-xs;
 }
+
+.element-box {
+  @apply bg-white p-4 rounded-lg shadow-lg w-60;
+}
+
